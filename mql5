@@ -1,0 +1,60 @@
+
+//+------------------------------------------------------------------+
+//|                                                  Volatility Scanner Multi TF |
+//|                                            Developer's Site: forexroboteasy.com |
+//|                                              Developed by: Forex Robot Easy Team |
+//+------------------------------------------------------------------+
+
+// Define button colors
+color yellowColor = Yellow;
+
+//+------------------------------------------------------------------+
+//|                                            Volatility Scanner Multi TF |
+//|                                            Detects and colors buttons for potential trading opportunities |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+   // Set up the user-friendly interface
+   ObjectCreate(0, 'Button', OBJ_BUTTON, 0, 0, 0);
+   ObjectSetInteger(0, 'Button', OBJPROP_COLOR, yellowColor);
+   ObjectSetText(0, 'Volatility Squeeze', 10, 'Arial', Yellow);
+
+   return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//|                                                  Volatility Scanner Multi TF |
+//|                                                  Scans all timeframes for volatility contraction |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+   // Loop through all timeframes
+   for (int tf = PERIOD_M1; tf <= PERIOD_D1; tf++)
+   {
+      // Calculate the range of market volatility
+      double volatilityRange = CalculateVolatilityRange(tf);
+
+      // Check if the volatility is significantly lower than its normal range
+      if (volatilityRange < 0.5)
+      {
+         // Color the corresponding button yellow
+         ObjectSetInteger(0, 'Button', OBJPROP_COLOR, yellowColor);
+      }
+   }
+}
+
+//+------------------------------------------------------------------+
+//|                                                  Volatility Scanner Multi TF |
+//|                                                  Calculates the range of market volatility |
+//+------------------------------------------------------------------+
+double CalculateVolatilityRange(int timeframe)
+{
+   // Get the current high and low prices
+   double highPrice = High[timeframe][0];
+   double lowPrice = Low[timeframe][0];
+
+   // Calculate the range of market volatility
+   double volatilityRange = highPrice - lowPrice;
+
+   return volatilityRange;
+}
